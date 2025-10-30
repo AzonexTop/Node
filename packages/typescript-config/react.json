@@ -2,13 +2,18 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./base.json",
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "ES2020"],
+    "lib": ["dom", "dom.iterable", "ES2022"],
     "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", "**/*.test.ts", "**/*.test.tsx"],
+  "exclude": ["node_modules", "dist", "build", ".next", "coverage"]
 }

@@ -15,7 +15,12 @@
     "dev": "tsc --watch",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist *.tsbuildinfo"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -24,10 +29,27 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@storybook/addon-essentials": "^7.6.5",
+    "@storybook/addon-interactions": "^7.6.5",
+    "@storybook/addon-links": "^7.6.5",
+    "@storybook/blocks": "^7.6.5",
+    "@storybook/react": "^7.6.5",
+    "@storybook/react-vite": "^7.6.5",
+    "@storybook/testing-library": "^0.2.2",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
     "@types/react": "^18.2.42",
     "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.0",
     "eslint": "^8.54.0",
+    "eslint-plugin-storybook": "^0.6.15",
+    "jsdom": "^23.0.1",
     "react": "^18.2.0",
-    "typescript": "^5.3.2"
+    "react-dom": "^18.2.0",
+    "storybook": "^7.6.5",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.4",
+    "vitest": "^1.0.4"
   }
 }
