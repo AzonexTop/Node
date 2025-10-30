@@ -1,0 +1,13 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY packages/python-shared /app/packages/python-shared
+COPY apps/data-pipeline /app/apps/data-pipeline
+
+RUN pip install --no-cache-dir -e /app/packages/python-shared
+RUN pip install --no-cache-dir -e /app/apps/data-pipeline
+
+WORKDIR /app/apps/data-pipeline
+
+CMD ["python", "src/pipeline/main.py"]

@@ -1,0 +1,59 @@
+# Dependencies
+node_modules
+__pycache__
+*.pyc
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist-python/
+build-python/
+
+# Build outputs
+.next
+dist
+build
+out
+*.tsbuildinfo
+
+# Testing
+coverage
+.nyc_output
+*.log
+.pytest_cache
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Turbo
+.turbo
+
+# Misc
+*.pem
+.cache
+
+# Terraform
+infrastructure/**/.terraform
+infrastructure/**/*.tfstate
+infrastructure/**/*.tfstate.backup
+infrastructure/**/.terraform.lock.hcl
+
+# Docker
+.dockerignore

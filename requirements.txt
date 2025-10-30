@@ -1,0 +1,3 @@
+# Root requirements for Python development
+-e packages/python-shared
+-e apps/data-pipeline

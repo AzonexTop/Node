@@ -1,0 +1,12 @@
+{
+  "name": "@repo/python-shared",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "pip install -e .",
+    "test": "pytest",
+    "lint": "flake8 src/ && black --check src/ && mypy src/",
+    "format": "black src/",
+    "clean": "rm -rf build dist *.egg-info .pytest_cache .mypy_cache"
+  }
+}

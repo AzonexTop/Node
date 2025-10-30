@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ../../
+      dockerfile: infrastructure/docker/Dockerfile.web
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:3001
+    depends_on:
+      - api
+    networks:
+      - monorepo-network
+
+  api:
+    build:
+      context: ../../
+      dockerfile: infrastructure/docker/Dockerfile.api
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - monorepo-network
+
+  data-pipeline:
+    build:
+      context: ../../
+      dockerfile: infrastructure/docker/Dockerfile.pipeline
+    environment:
+      - PYTHON_ENV=production
+      - DATA_OUTPUT_PATH=/data/output
+    volumes:
+      - pipeline-data:/data
+    networks:
+      - monorepo-network
+
+networks:
+  monorepo-network:
+    driver: bridge
+
+volumes:
+  pipeline-data:
