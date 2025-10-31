@@ -1,0 +1,61 @@
+name: Cache Warmup
+
+on:
+  schedule:
+    # Run every Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  warmup-cache:
+    name: Warmup Dependencies Cache
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Build all packages (populate Turbo cache)
+        run: npm run build
+
+      - name: Run lint (populate Turbo cache)
+        run: npm run lint
+
+      - name: Run typecheck (populate Turbo cache)
+        run: npm run typecheck
+
+      - name: Cache summary
+        run: |
+          echo "✅ Cache warmed up successfully!"
+          echo "Node modules cached: $(du -sh node_modules 2>/dev/null || echo 'N/A')"
+          echo "Turbo cache: $(du -sh .turbo 2>/dev/null || echo 'N/A')"
+          echo "Pip cache: $(du -sh ~/.cache/pip 2>/dev/null || echo 'N/A')"

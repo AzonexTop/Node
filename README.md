@@ -1,5 +1,9 @@
 # AI-Driven Indian Markets Platform
 
+[![CI](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml)
+[![PR Validation](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/pr-validation.yml)
+[![Publish](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/publish.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/publish.yml)
+
 A comprehensive monorepo setup using Turborepo with support for polyglot services (TypeScript/JavaScript and Python). This platform provides real-time market data analysis, AI-powered trading signals, portfolio management, and compliance monitoring for Indian financial markets.
 
 ## 📋 Documentation
@@ -10,6 +14,9 @@ A comprehensive monorepo setup using Turborepo with support for polyglot service
 - **[NFR Specifications](./docs/architecture/NFR_SPECIFICATIONS.md)** - Non-functional requirements
 - **[Technology Decisions](./docs/architecture/TECHNOLOGY_DECISIONS.md)** - Technology stack rationale
 - **[Implementation Roadmap](./docs/architecture/ROADMAP_VISUAL.md)** - 18-month phased roadmap
+
+### Development & Operations
+- **[CI/CD Workflows](./.github/workflows/README.md)** - GitHub Actions pipeline documentation
 
 See [docs/architecture/README.md](./docs/architecture/README.md) for the complete architecture documentation index.
 
@@ -263,25 +270,61 @@ pip install -e ../../packages/python-shared
 
 ## CI/CD
 
-The monorepo is designed to work with CI/CD pipelines. Turborepo's caching and task orchestration ensure efficient builds.
+The monorepo uses GitHub Actions for continuous integration and deployment. All workflows are configured to run lint, tests, type checks, and builds with efficient caching for both Node.js and Python dependencies.
 
-Example GitHub Actions workflow:
+### Workflows
 
-```yaml
-- name: Install dependencies
-  run: npm install
+- **CI**: Runs on every push and PR to `main`/`develop` branches
+  - Lint checks (ESLint, Prettier, Flake8, Black, mypy)
+  - Type checking (TypeScript)
+  - Unit tests (Jest, pytest)
+  - Build verification
+  - Artifact uploads (build outputs, coverage reports)
 
-- name: Build
-  run: npm run build
+- **PR Validation**: Validates pull requests
+  - Conventional Commits format
+  - Merge conflict detection
+  - Large file detection
+  - PR size warnings
 
-- name: Lint
-  run: npm run lint
+- **Publish Artifacts**: Builds and publishes on releases
+  - Creates versioned archives of all apps
+  - Builds Docker images
+  - Attaches artifacts to GitHub releases
 
-- name: Test
-  run: npm run test
+- **Cache Warmup**: Weekly cache optimization
+- **Dependency Review**: Security checks on dependency updates
 
-- name: Type check
-  run: npm run typecheck
+### Required Checks for PRs
+
+The following checks must pass before merging:
+- ✅ Lint
+- ✅ Type Check
+- ✅ Test
+- ✅ Build
+- ✅ Validate PR
+
+### Branch Protection
+
+Configure branch protection rules for `main`:
+1. Require pull request reviews (1+ approvals)
+2. Require status checks to pass
+3. Require conversation resolution
+
+See [`.github/workflows/README.md`](.github/workflows/README.md) for detailed CI/CD documentation.
+
+### Running Checks Locally
+
+```bash
+# Format code
+npm run format
+
+# Run all checks
+npm run format:check
+npm run lint
+npm run typecheck
+npm run test
+npm run build
 ```
 
 ## Scripts Reference

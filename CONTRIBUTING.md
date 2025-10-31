@@ -120,12 +120,50 @@ chore: updating build tasks, dependencies, etc.
 
 ## Pull Request Process
 
-1. Update README if adding new features
-2. Ensure all tests pass
-3. Ensure code is formatted and linted
-4. Request review from maintainers
-5. Address review feedback
-6. Squash commits if requested
+1. **Create a branch** following naming conventions:
+   - `feat/description` - for new features
+   - `fix/description` - for bug fixes
+   - `docs/description` - for documentation
+   - `refactor/description` - for code refactoring
+
+2. **Write a descriptive PR title** following Conventional Commits:
+   - `feat: Add user authentication`
+   - `fix: Resolve API timeout issue`
+   - `docs: Update installation guide`
+
+3. **Ensure all CI checks pass**:
+   - ✅ Lint (formatting and code quality)
+   - ✅ Type Check (TypeScript type safety)
+   - ✅ Test (unit tests pass)
+   - ✅ Build (successful build)
+   - ✅ PR Validation (title format, conflicts, file sizes)
+
+4. **Run checks locally before pushing**:
+   ```bash
+   npm run format:check
+   npm run lint
+   npm run typecheck
+   npm run test
+   npm run build
+   ```
+
+5. **Update documentation** if adding new features or changing behavior
+
+6. **Request review** from maintainers
+
+7. **Address review feedback** promptly
+
+8. **Squash commits** if requested to maintain clean history
+
+### CI/CD Integration
+
+All pull requests automatically run through our CI pipeline:
+- **Parallel execution** of lint, typecheck, test, and build jobs
+- **Caching** for faster runs (Node.js, Python, Turbo)
+- **Artifacts** uploaded for coverage reports and build outputs
+- **Status badges** updated on PR
+
+See [`.github/workflows/README.md`](.github/workflows/README.md) for detailed CI/CD information.
 
 ## Questions?
 
