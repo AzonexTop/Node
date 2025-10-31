@@ -1,6 +1,17 @@
-# Monorepo
+# AI-Driven Indian Markets Platform
 
-A comprehensive monorepo setup using Turborepo with support for polyglot services (TypeScript/JavaScript and Python).
+A comprehensive monorepo setup using Turborepo with support for polyglot services (TypeScript/JavaScript and Python). This platform provides real-time market data analysis, AI-powered trading signals, portfolio management, and compliance monitoring for Indian financial markets.
+
+## 📋 Documentation
+
+### Architecture & Planning
+- **[Architecture Blueprint](./docs/architecture/PLATFORM_BLUEPRINT.md)** - Comprehensive solution architecture
+- **[Dependency Graph](./docs/architecture/DEPENDENCY_GRAPH.md)** - Service dependencies and data flows
+- **[NFR Specifications](./docs/architecture/NFR_SPECIFICATIONS.md)** - Non-functional requirements
+- **[Technology Decisions](./docs/architecture/TECHNOLOGY_DECISIONS.md)** - Technology stack rationale
+- **[Implementation Roadmap](./docs/architecture/ROADMAP_VISUAL.md)** - 18-month phased roadmap
+
+See [docs/architecture/README.md](./docs/architecture/README.md) for the complete architecture documentation index.
 
 ## Repository Structure
 
@@ -19,6 +30,13 @@ A comprehensive monorepo setup using Turborepo with support for polyglot service
 ├── infrastructure/
 │   ├── docker/                 # Docker configurations
 │   └── terraform/              # Terraform infrastructure definitions
+├── docs/
+│   └── architecture/           # Platform architecture documentation
+│       ├── PLATFORM_BLUEPRINT.md
+│       ├── DEPENDENCY_GRAPH.md
+│       ├── NFR_SPECIFICATIONS.md
+│       ├── TECHNOLOGY_DECISIONS.md
+│       └── ROADMAP_VISUAL.md
 ├── turbo.json                  # Turborepo pipeline configuration
 ├── package.json                # Root package configuration
 └── tsconfig.json               # Base TypeScript configuration
