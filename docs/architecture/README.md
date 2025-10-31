@@ -44,6 +44,12 @@ Welcome to the architecture documentation for the **AI-Driven Indian Markets Pla
    - Infrastructure (Kubernetes, Terraform, ArgoCD)
    - Third-party services (DigiLocker, Razorpay)
 
+5. **[DATA_SCHEMA_DESIGN.md](./DATA_SCHEMA_DESIGN.md)** - Data schema specification
+   - Relational ERD for PostgreSQL/TimescaleDB domains
+   - Standardised lineage metadata across all stores
+   - MongoDB, Elasticsearch, Redis, and warehouse models
+   - Indexing, partitioning, and governance guidance
+
 ---
 
 ## 🎯 Quick Navigation by Role
@@ -82,6 +88,12 @@ Explore:
 - [AI/ML Services](./PLATFORM_BLUEPRINT.md#aiml-services)
 - [Data Flows](./PLATFORM_BLUEPRINT.md#data-flows)
 - [AI/ML Stack](./TECHNOLOGY_DECISIONS.md#aiml-stack)
+
+### For Data Engineers
+Review:
+- [Data Schema Design](./DATA_SCHEMA_DESIGN.md)
+- [Dependency Graph](./DEPENDENCY_GRAPH.md)
+- [Technology Decisions](./TECHNOLOGY_DECISIONS.md)
 
 ### For Frontend Engineers
 Check:

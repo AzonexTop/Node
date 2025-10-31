@@ -90,6 +90,12 @@
    - Key questions for discussion
    - Approval sign-off section
 
+8. **[DATA_SCHEMA_DESIGN.md](./architecture/DATA_SCHEMA_DESIGN.md)** (902 lines)
+   - Detailed ERD for companies, instruments, portfolios, and audits
+   - Timescale hypertable specs for prices, ratios, and valuations
+   - MongoDB, Elasticsearch, Redis, and warehouse schema definitions
+   - Standardised lineage metadata and governance controls
+
 ---
 
 ## 🎯 Key Architecture Decisions
