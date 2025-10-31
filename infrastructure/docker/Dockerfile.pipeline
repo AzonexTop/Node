@@ -1,12 +1,35 @@
-FROM python:3.11-slim
+FROM python:3.11-slim AS base
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+FROM base AS builder
 
 WORKDIR /app
 
-COPY packages/python-shared /app/packages/python-shared
-COPY apps/data-pipeline /app/apps/data-pipeline
+COPY packages/python-shared/setup.py packages/python-shared/setup.py
+COPY packages/python-shared/src packages/python-shared/src
+COPY apps/data-pipeline/setup.py apps/data-pipeline/setup.py
+COPY apps/data-pipeline/src apps/data-pipeline/src
 
-RUN pip install --no-cache-dir -e /app/packages/python-shared
-RUN pip install --no-cache-dir -e /app/apps/data-pipeline
+RUN pip install --no-cache-dir --user -e /app/packages/python-shared
+RUN pip install --no-cache-dir --user -e /app/apps/data-pipeline
+
+FROM python:3.11-slim AS runner
+
+WORKDIR /app
+
+RUN addgroup --system --gid 1001 python && \
+    adduser --system --uid 1001 --gid 1001 python
+
+COPY --from=builder /root/.local /home/python/.local
+COPY --from=builder /app /app
+
+ENV PATH=/home/python/.local/bin:$PATH
+ENV PYTHONPATH=/app/packages/python-shared/src:/app/apps/data-pipeline/src
+
+USER python
 
 WORKDIR /app/apps/data-pipeline
 

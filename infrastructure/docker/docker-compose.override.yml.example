@@ -1,0 +1,53 @@
+# docker-compose.override.yml.example
+#
+# Copy this file to docker-compose.override.yml to customize your local setup.
+# The override file is automatically merged with docker-compose.yml.
+#
+# Common use cases:
+# - Custom port mappings
+# - Additional environment variables
+# - Volume mounts for specific directories
+# - Memory/CPU limits
+# - Additional services
+
+version: '3.8'
+
+services:
+  # Example: Customize web service
+  # web:
+  #   ports:
+  #     - "3002:3000"  # Use different port
+  #   environment:
+  #     - CUSTOM_VAR=value
+
+  # Example: Customize API service
+  # api:
+  #   environment:
+  #     - LOG_LEVEL=debug
+  #   volumes:
+  #     - ./logs:/app/logs  # Mount logs directory
+
+  # Example: Customize database
+  # postgres:
+  #   ports:
+  #     - "5433:5432"  # Use different port
+  #   environment:
+  #     - POSTGRES_PASSWORD=custom_password
+
+  # Example: Add resource limits
+  # elasticsearch:
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 1G
+  #       reservations:
+  #         memory: 512M
+
+# Example: Add custom networks
+# networks:
+#   custom-network:
+#     driver: bridge
+
+# Example: Add custom volumes
+# volumes:
+#   custom-data:

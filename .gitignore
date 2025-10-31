@@ -56,4 +56,4 @@ infrastructure/**/*.tfstate.backup
 infrastructure/**/.terraform.lock.hcl
 
 # Docker
-.dockerignore
+docker-compose.override.yml

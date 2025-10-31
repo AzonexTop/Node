@@ -1,35 +1,56 @@
 version: '3.8'
 
 services:
-  # Application Services
+  # Application Services (Development Mode)
   web:
     build:
       context: ../../
       dockerfile: infrastructure/docker/Dockerfile.web
+      target: base
+    command: sh -c "cd /app && npm install && npm run dev --filter=web"
     ports:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:3001
-      - NODE_ENV=production
+      - NODE_ENV=development
+    volumes:
+      - ../../apps/web:/app/apps/web
+      - ../../packages:/app/packages
+      - ../../package.json:/app/package.json
+      - ../../package-lock.json:/app/package-lock.json
+      - ../../turbo.json:/app/turbo.json
+      - /app/node_modules
+      - /app/apps/web/node_modules
+      - /app/apps/web/.next
     depends_on:
       - api
     networks:
       - monorepo-network
-    restart: unless-stopped
 
   api:
     build:
       context: ../../
       dockerfile: infrastructure/docker/Dockerfile.api
+      target: base
+    command: sh -c "cd /app && npm install && npm run dev --filter=api"
     ports:
       - "3001:3001"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=3001
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/monorepo
       - MONGODB_URL=mongodb://mongo:27017/monorepo
       - REDIS_URL=redis://redis:6379
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+    volumes:
+      - ../../apps/api:/app/apps/api
+      - ../../packages:/app/packages
+      - ../../package.json:/app/package.json
+      - ../../package-lock.json:/app/package-lock.json
+      - ../../turbo.json:/app/turbo.json
+      - /app/node_modules
+      - /app/apps/api/node_modules
+      - /app/apps/api/dist
     depends_on:
       - postgres
       - mongo
@@ -37,19 +58,22 @@ services:
       - elasticsearch
     networks:
       - monorepo-network
-    restart: unless-stopped
 
   data-pipeline:
     build:
       context: ../../
       dockerfile: infrastructure/docker/Dockerfile.pipeline
+      target: base
+    command: sh -c "pip install -e /app/packages/python-shared && pip install -e /app/apps/data-pipeline && python /app/apps/data-pipeline/src/pipeline/main.py"
     environment:
-      - PYTHON_ENV=production
+      - PYTHON_ENV=development
       - DATA_OUTPUT_PATH=/data/output
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/monorepo
       - MONGODB_URL=mongodb://mongo:27017/monorepo
       - REDIS_URL=redis://redis:6379
     volumes:
+      - ../../apps/data-pipeline:/app/apps/data-pipeline
+      - ../../packages/python-shared:/app/packages/python-shared
       - pipeline-data:/data
     depends_on:
       - postgres
@@ -57,7 +81,6 @@ services:
       - redis
     networks:
       - monorepo-network
-    restart: unless-stopped
 
   # Database Services
   postgres:
@@ -69,10 +92,9 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=monorepo
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data-dev:/var/lib/postgresql/data
     networks:
       - monorepo-network
-    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -86,10 +108,9 @@ services:
     environment:
       - MONGO_INITDB_DATABASE=monorepo
     volumes:
-      - mongo-data:/data/db
+      - mongo-data-dev:/data/db
     networks:
       - monorepo-network
-    restart: unless-stopped
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -101,10 +122,9 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis-data:/data
+      - redis-data-dev:/data
     networks:
       - monorepo-network
-    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -121,10 +141,9 @@ services:
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
+      - elasticsearch-data-dev:/usr/share/elasticsearch/data
     networks:
       - monorepo-network
-    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
       interval: 30s
@@ -137,7 +156,7 @@ networks:
 
 volumes:
   pipeline-data:
-  postgres-data:
-  mongo-data:
-  redis-data:
-  elasticsearch-data:
+  postgres-data-dev:
+  mongo-data-dev:
+  redis-data-dev:
+  elasticsearch-data-dev:

@@ -192,14 +192,32 @@ Shared TypeScript configurations:
 
 ### Docker
 
-Build and run with Docker Compose:
+The monorepo includes comprehensive Docker configurations for local development and production deployment:
 
+**Quick Start (Development)**:
 ```bash
-cd infrastructure/docker
-docker-compose up --build
+# Using Make (recommended)
+make dev-up
+
+# Or using scripts
+./infrastructure/docker/scripts/start.sh dev
 ```
 
-See [infrastructure/docker/README.md](infrastructure/docker/README.md) for details.
+**Production Build**:
+```bash
+make build
+make up
+```
+
+**Features**:
+- Multi-stage Dockerfiles optimized for each service type
+- PostgreSQL with TimescaleDB extension
+- MongoDB, Redis, and Elasticsearch
+- Hot-reload support in development mode
+- Production-ready health checks
+- Makefile for easy operations
+
+See [infrastructure/docker/README.md](infrastructure/docker/README.md) for comprehensive documentation.
 
 ### Terraform
 
