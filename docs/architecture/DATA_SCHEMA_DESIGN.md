@@ -43,6 +43,7 @@
 8. [Appendix](#appendix)
    1. [Lineage Verification Status Enumeration](#lineage-verification-status-enumeration)
    2. [Sample DDL Snippets](#sample-ddl-snippets)
+9. [Summary](#summary)
 
 ---
 
@@ -174,7 +175,7 @@ Captures alternative names for fuzzy searches.
 | `company_alias_id` | `uuid` | ❌ | PK. |
 | `company_id` | `uuid` | ❌ | FK to `companies`. |
 | `alias` | `text` | ❌ | Alternate name. |
-| `alias_type` | `alias_type_enum` | ❌ | (TRADE_NAME, BRAND, LEGACY).
+| `alias_type` | `alias_type_enum` | ❌ | (TRADE_NAME, BRAND, LEGACY). |
 | `valid_from` | `date` | ❌ | Start date. |
 | `valid_to` | `date` | ✅ | Inclusive end date. |
 | `source_name` | `text` | ❌ | |
@@ -586,7 +587,8 @@ Key reference data supporting the model:
 | `brokers` | Registered brokers / custodians. |
 | `currencies` | ISO currency table for validation. |
 | `verification_status_enum` | See [Appendix A](#lineage-verification-status-enumeration). |
-| Additional enums (`instrument_type_enum`, `alert_type_enum`, etc.) ensure integrity across services.
+
+Additional enums (`instrument_type_enum`, `alert_type_enum`, etc.) ensure integrity across services.
 
 All reference tables inherit the lineage metadata columns for provenance.
 
@@ -895,6 +897,63 @@ CREATE TABLE audit_events_2024_10 PARTITION OF audit_events
   FOR VALUES FROM ('2024-10-01') TO ('2024-11-01');
 ALTER TABLE audit_events_2024_10 ADD PRIMARY KEY (audit_event_id);
 ```
+
+---
+
+## Summary
+
+### Schema Coverage Overview
+
+| Domain | PostgreSQL Tables | TimescaleDB Hypertables | MongoDB Collections | Elasticsearch Indices | Redis Keyspaces |
+|--------|-------------------|-------------------------|---------------------|----------------------|-----------------|
+| **Companies & Instruments** | 4 tables | 1 (prices) | - | 1 (search) | 2 (prices, metadata) |
+| **Financial Statements** | 4 tables | 1 (ratios) | 1 (documents) | 1 (documents) | - |
+| **Ownership** | 2 tables | - | - | - | - |
+| **Alerts** | 1 table | 1 (events) | - | 1 (search) | 1 (active alerts) |
+| **Portfolios** | 4 tables | 1 (valuations) | 1 (notes) | - | 1 (summaries) |
+| **Reports** | 3 tables | - | - | - | - |
+| **Audit & Compliance** | 2 tables | - | - | - | - |
+| **Reference Data** | 4+ tables | - | - | - | 1 (reference cache) |
+| **ML Features** | - | - | 1 (snapshots) | - | - |
+| **Data Warehouse** | 8 dimensions + 8 facts | - | - | - | - |
+
+### Key Design Principles
+
+✅ **Standardised Lineage**: All entities carry `source_name`, `source_url`, `timestamp`, and `verification_status` metadata.
+
+✅ **Multi-Store Architecture**: Right data store for right workload (OLTP → PostgreSQL, time-series → TimescaleDB, documents → MongoDB, search → Elasticsearch, cache → Redis, analytics → Warehouse).
+
+✅ **SEBI Compliance**: 7-year audit retention, immutable audit logs, encrypted PII, comprehensive lineage tracking.
+
+✅ **Scalability Ready**: Partitioning strategies, hypertable compression, TTL policies, and indexing optimised for growth.
+
+✅ **Type Safety**: Strong typing with PostgreSQL enums, UUID primary keys, and explicit nullable constraints.
+
+### Implementation Checklist
+
+- [ ] Deploy PostgreSQL 15 with TimescaleDB extension
+- [ ] Create all enum types and reference tables
+- [ ] Implement domain tables with proper indexes and constraints
+- [ ] Configure TimescaleDB hypertables with compression policies
+- [ ] Set up MongoDB collections with TTL indexes
+- [ ] Configure Elasticsearch index templates and pipelines
+- [ ] Implement Redis keyspace conventions in services
+- [ ] Build data warehouse dimensional model
+- [ ] Establish ETL pipelines with lineage tracking
+- [ ] Enable Row Level Security (RLS) for multi-tenant tables
+- [ ] Configure partition maintenance jobs for audit tables
+- [ ] Document API contracts for lineage metadata population
+
+---
+
+## Related Documentation
+
+This schema design should be read in conjunction with:
+
+- **[Platform Blueprint](./PLATFORM_BLUEPRINT.md)**: Service architecture and technology stack
+- **[Dependency Graph](./DEPENDENCY_GRAPH.md)**: Service and data flow dependencies
+- **[Technology Decisions](./TECHNOLOGY_DECISIONS.md)**: Rationale for PostgreSQL, TimescaleDB, MongoDB, and other data store choices
+- **[NFR Specifications](./NFR_SPECIFICATIONS.md)**: Performance, scalability, and availability targets for data layer
 
 ---
 
