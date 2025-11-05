@@ -114,7 +114,17 @@ cd apps/web && npm run build
 Run tests across all packages:
 
 ```bash
+# Run all tests
 npm run test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with UI
+npm run test:ui
+
+# Run Python tests only
+npm run test:python
 ```
 
 ### Linting
@@ -123,12 +133,18 @@ Lint all packages:
 
 ```bash
 npm run lint
+
+# Auto-fix linting issues
+npm run lint:fix
 ```
 
 Format code:
 
 ```bash
 npm run format
+
+# Check formatting
+npm run format:check
 ```
 
 ### Type Checking
@@ -137,6 +153,21 @@ Type check all TypeScript packages:
 
 ```bash
 npm run typecheck
+
+# Type check Python packages
+npm run typecheck:python
+```
+
+### Storybook
+
+View and develop UI components in isolation:
+
+```bash
+# Start Storybook development server
+npm run storybook
+
+# Build Storybook static files
+npm run build-storybook
 ```
 
 ## Applications
@@ -327,16 +358,55 @@ npm run test
 npm run build
 ```
 
+## Development Tools
+
+This monorepo includes comprehensive development tooling:
+
+- **ESLint**: Configured linting for TypeScript/JavaScript with shared configs
+- **Prettier**: Code formatting with consistent style
+- **TypeScript**: Type checking with strict configurations
+- **Husky**: Git hooks for pre-commit quality checks
+- **Commitlint**: Conventional commit message enforcement
+- **Testing**: Jest (Node.js), Vitest (React), pytest (Python)
+- **Storybook**: Component development and documentation
+- **Black**: Python code formatting
+- **mypy**: Python type checking
+- **Flake8**: Python linting
+
 ## Scripts Reference
 
+### Development
 - `npm run dev` - Start all apps in development mode
 - `npm run build` - Build all packages and apps
+
+### Code Quality
 - `npm run lint` - Lint all packages
-- `npm run test` - Run tests across all packages
-- `npm run typecheck` - Type check all TypeScript packages
-- `npm run format` - Format code with Prettier
+- `npm run lint:fix` - Auto-fix linting issues
+- `npm run format` - Format all code (Prettier + Black)
 - `npm run format:check` - Check code formatting
+- `npm run typecheck` - Type check TypeScript packages
+- `npm run typecheck:python` - Type check Python packages
+
+### Testing
+- `npm run test` - Run all tests
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:ui` - Run tests with UI interface
+- `npm run test:python` - Run Python tests only
+- `npm run test:python:watch` - Run Python tests in watch mode
+
+### Storybook
+- `npm run storybook` - Start Storybook development server
+- `npm run build-storybook` - Build Storybook static files
+
+### Maintenance
 - `npm run clean` - Clean build artifacts
+- `npm run prepare` - Set up git hooks
+
+## Documentation
+
+- **[Development Guide](./DEVELOPMENT.md)** - Comprehensive development workflow
+- **[Testing Guide](./TESTING.md)** - Testing strategies and best practices
+- **[Contributing Guide](./CONTRIBUTING.md)** - Contribution guidelines
 
 ## Best Practices
 
